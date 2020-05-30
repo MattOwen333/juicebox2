@@ -1,0 +1,43 @@
+usersRouter.post('/login', async (req, res, next) => {
+  const { username, password } = req.body;
+  const jwt = require('jsonwebtoken');
+  
+
+
+  // request must have both
+  if (!username || !password) {
+    next({
+      name: "MissingCredentialsError",
+      message: "Please supply both a username and password"
+    });
+  }
+
+  try {
+    const user = await getUserByUsername(username);
+
+    if (user && user.password == password) {
+    
+        
+const token = jwt.sign({ id: user.id , username: user.username }, process.env.JWT_SECRET);
+
+      // create token & return to user
+
+
+
+      res.send({ message: "you're logged in!", token });
+    } else {
+      next({ 
+        name: 'IncorrectCredentialsError', 
+        message: 'Username or password is incorrect'
+      });
+    }
+  } catch(error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+Require the jsonwebtoken package, store it in a constant jwt
+Sign an object (something like jwt.sign({/* user data */}, process.env.JWT_SECRET)) with both the id and username from the user object with the secret in process.env.JWT_SECRET
+Add a key of token, with the token returned from step 2, to the object passed to res.send()
+To get a refresher on this process, look at the example from the previous "JSON Web Tokens" section in this workshop.
