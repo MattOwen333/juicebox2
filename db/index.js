@@ -195,7 +195,7 @@ async function getAllPosts() {
     const posts = await Promise.all(
       postIds.map((post) => getPostById(post.id))
     );
-
+    console.log("THIS IS POSTS", posts);
     return posts;
   } catch (error) {
     throw error;

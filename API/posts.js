@@ -122,7 +122,7 @@ postsRouter.get("/", async (req, res) => {
     const posts = allPosts.filter((post) => {
       return post.active || (req.user && post.author.id === req.user.id);
     });
-    console.log("THIS IS POSTS", posts);
+    
     res.send({
       posts,
     });
